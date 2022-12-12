@@ -1,4 +1,5 @@
 import '../../api/api_exceptions.dart';
+import '../../app/app_config.router.dart';
 import '../../constants/constants.dart' show SnackbarType;
 import 'package:stacked_services/stacked_services.dart';
 
@@ -18,27 +19,27 @@ class LoginViewModel extends FormViewModel with ValidatorMixin {
   bool get rememberMe => _rememberMe;
 
   void login() async {
-    final data = {
-      EmailValueKey: emailValue,
-      PasswordValueKey: passwordValue,
-    };
-    if (isFormValid &&
-        data.values
-            .any((element) => element != null ? element.isNotEmpty : false)) {
-      setBusy(true);
-      final response = await _auth.login(data: data);
+    setBusy(true);
+    if (isFormValid) {
+      final response = await _auth.login(data: formValueMap);
       response.map(
         success: (value) {
-          setBusy(false);
+          _snackbar
+              .showCustomSnackBar(
+                message: value.data,
+                variant: SnackbarType.success,
+              )!
+              .then((_) => to(Routes.mainView));
         },
         failure: (value) {
-          setBusy(false);
           _snackbar.showCustomSnackBar(
-            message: ApiExceptions.getErrorMessage(value.error),
+            message:
+                '${ApiExceptions.getErrorMessage(value.error.exception)}\n${value.error.error.message!}',
             variant: SnackbarType.failure,
           );
         },
       );
+      setBusy(false);
     }
   }
 

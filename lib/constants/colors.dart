@@ -7,4 +7,7 @@ class AppColors {
   static const kBrown = Color(0xffE8B985);
   static const kHint = Color(0xff909090);
   static const kBorder = Color.fromRGBO(19, 18, 18, .5);
+  static const kPrimary1 = Color(0xff55848D);
+  static const kSecondary1 = Color(0xff336C76);
+  static const kFadedGrey = Color(0xff6B6476);
 }

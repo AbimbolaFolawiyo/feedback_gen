@@ -21,6 +21,13 @@ mixin ValidatorMixin {
     }
   }
 
+  String? validateConfirmPassword(input, password) {
+    if (input != password) {
+      return 'Password does not match';
+    }
+    return null;
+  }
+
   String? validatePhone(input) {
     if (_phoneValidation(input)) {
       return null;
@@ -31,8 +38,8 @@ mixin ValidatorMixin {
     }
   }
 
-  String? validateNull(String input) {
-    if (input.isEmpty) {
+  String? validateNull(String? input) {
+    if (input!.isEmpty) {
       return 'This field cannot be empty';
     } else {
       return null;

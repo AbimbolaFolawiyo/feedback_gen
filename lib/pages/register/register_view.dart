@@ -1,6 +1,5 @@
 import 'package:feedback_gen/app/app_config.router.dart';
 import 'package:feedback_gen/pages/register/register_vm.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -13,9 +12,9 @@ import 'register_view.form.dart';
 
 @FormView(
   fields: [
-    FormTextField(name: 'fullName'),
+    FormTextField(name: 'name'),
     FormTextField(name: 'email'),
-    FormTextField(name: 'phone'),
+    // FormTextField(name: 'phone'),
     FormTextField(name: 'password')
   ],
 )
@@ -50,13 +49,13 @@ class RegisterView extends StatelessWidget with $RegisterView {
                           const CustomText(text: Strings.fullName),
                           Gap(4.h),
                           CustomTextField(
-                            controller: fullNameController,
-                            focusNode: fullNameFocusNode,
+                            controller: nameController,
+                            focusNode: nameFocusNode,
                             hint: '${Strings.enter} ${Strings.fullName}',
                           ),
-                          if (model.hasFullNameValidationMessage)
+                          if (model.hasNameValidationMessage)
                             ErrorText(
-                              errorText: model.fullNameValidationMessage!,
+                              errorText: model.nameValidationMessage!,
                             ),
                           Gap(17.h),
                           const CustomText(text: Strings.emailAddress),
@@ -68,19 +67,19 @@ class RegisterView extends StatelessWidget with $RegisterView {
                           ),
                           if (model.hasEmailValidationMessage)
                             ErrorText(errorText: model.emailValidationMessage!),
-                          Gap(17.h),
-                          const CustomText(text: Strings.phoneNumber),
-                          Gap(4.h),
-                          CustomTextField(
-                            controller: phoneController,
-                            focusNode: phoneFocusNode,
-                            hint: '${Strings.enter} ${Strings.phoneNumber}',
-                            keyboard: const TextInputType.numberWithOptions(
-                              signed: true,
-                            ),
-                          ),
-                          if (model.hasPhoneValidationMessage)
-                            ErrorText(errorText: model.phoneValidationMessage!),
+                          // Gap(17.h),
+                          // const CustomText(text: Strings.phoneNumber),
+                          // Gap(4.h),
+                          // CustomTextField(
+                          //   controller: phoneController,
+                          //   focusNode: phoneFocusNode,
+                          //   hint: '${Strings.enter} ${Strings.phoneNumber}',
+                          //   keyboard: const TextInputType.numberWithOptions(
+                          //     signed: true,
+                          //   ),
+                          // ),
+                          // if (model.hasPhoneValidationMessage)
+                          //   ErrorText(errorText: model.phoneValidationMessage!),
                           Gap(17.h),
                           const CustomText(text: Strings.password),
                           Gap(4.h),
@@ -94,39 +93,33 @@ class RegisterView extends StatelessWidget with $RegisterView {
                             ErrorText(
                               errorText: model.passwordValidationMessage!,
                             ),
-                          Gap(12.h),
-                          Expanded(
-                            child: _TermsAndAgreement(
-                              termsAccepted: model.termsAccepted,
-                              toggleTandA: (value) =>
-                                  model.toggleAcceptTerms(value!),
-                            ),
-                          ),
+                          // Gap(12.h),
+                          // Expanded(
+                          //   child: _TermsAndAgreement(
+                          //     termsAccepted: model.termsAccepted,
+                          //     toggleTandA: (value) =>
+                          //         model.toggleAcceptTerms(value!),
+                          //   ),
+                          // ),
                           Gap(40.h),
                           ValueListenableBuilder<TextEditingValue>(
-                            valueListenable: fullNameController,
+                            valueListenable: nameController,
                             builder: (context, fullName, child) =>
                                 ValueListenableBuilder<TextEditingValue>(
                               valueListenable: emailController,
-                              builder: (context, email, child) {
-                                return ValueListenableBuilder<TextEditingValue>(
-                                  valueListenable: phoneController,
-                                  builder: (context, phone, child) =>
-                                      ValueListenableBuilder<TextEditingValue>(
-                                    valueListenable: passwordController,
-                                    builder: (context, password, child) =>
-                                        CustomButton(
-                                      onTap: model.register,
-                                      absorbing: fullName.text.isEmpty ||
-                                          email.text.isEmpty ||
-                                          phone.text.isEmpty ||
-                                          password.text.isEmpty ||
-                                          model.isBusy,
-                                      text: Strings.signUp,
-                                    ),
-                                  ),
-                                );
-                              },
+                              builder: (context, email, child) =>
+                                  ValueListenableBuilder<TextEditingValue>(
+                                valueListenable: passwordController,
+                                builder: (context, password, child) =>
+                                    CustomButton(
+                                  onTap: model.register,
+                                  absorbing: fullName.text.isEmpty ||
+                                      email.text.isEmpty ||
+                                      password.text.isEmpty ||
+                                      model.isBusy,
+                                  text: Strings.signUp,
+                                ),
+                              ),
                             ),
                           ),
                           Gap(16.h),
@@ -155,72 +148,6 @@ class RegisterView extends StatelessWidget with $RegisterView {
           },
         ),
       ),
-    );
-  }
-}
-
-class _TermsAndAgreement extends StatelessWidget {
-  const _TermsAndAgreement({
-    Key? key,
-    this.toggleTandA,
-    required this.termsAccepted,
-  }) : super(key: key);
-  final Function(bool?)? toggleTandA;
-  final bool termsAccepted;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Checkbox(
-          splashRadius: 0,
-          checkColor: Colors.white,
-          activeColor: AppColors.kBrown,
-          value: termsAccepted,
-          onChanged: toggleTandA,
-          side: const BorderSide(
-            color: AppColors.kPrimary,
-            width: .5,
-          ),
-        ),
-        Flexible(
-          child: Text.rich(
-            TextSpan(
-              children: [
-                TextSpan(
-                  text: Strings.acceptTandC,
-                  style: TextStyle(
-                    color: AppColors.kPrimary,
-                    fontSize: 12.sp,
-                  ),
-                ),
-                TextSpan(
-                  text: ' ${Strings.useAgreement}',
-                  style: TextStyle(
-                    color: AppColors.kBrown,
-                    fontSize: 12.sp,
-                  ),
-                  recognizer: TapGestureRecognizer()..onTap = () {},
-                ),
-                TextSpan(
-                  text: ' ${Strings.and} ',
-                  style: TextStyle(
-                    color: AppColors.kPrimary,
-                    fontSize: 12.sp,
-                  ),
-                ),
-                TextSpan(
-                  text: Strings.privacyPolicy,
-                  style: TextStyle(
-                    color: AppColors.kBrown,
-                    fontSize: 12.sp,
-                  ),
-                  recognizer: TapGestureRecognizer()..onTap = () {},
-                )
-              ],
-            ),
-          ),
-        )
-      ],
     );
   }
 }

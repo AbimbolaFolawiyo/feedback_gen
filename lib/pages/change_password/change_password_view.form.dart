@@ -9,56 +9,52 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
-const String NameValueKey = 'name';
-const String EmailValueKey = 'email';
 const String PasswordValueKey = 'password';
+const String ConfirmPasswordValueKey = 'confirmPassword';
 
-final Map<String, TextEditingController> _RegisterViewTextEditingControllers =
-    {};
+final Map<String, TextEditingController>
+    _ChangePasswordViewTextEditingControllers = {};
 
-final Map<String, FocusNode> _RegisterViewFocusNodes = {};
+final Map<String, FocusNode> _ChangePasswordViewFocusNodes = {};
 
-final Map<String, String? Function(String?)?> _RegisterViewTextValidations = {
-  NameValueKey: null,
-  EmailValueKey: null,
+final Map<String, String? Function(String?)?>
+    _ChangePasswordViewTextValidations = {
   PasswordValueKey: null,
+  ConfirmPasswordValueKey: null,
 };
 
-mixin $RegisterView on StatelessWidget {
-  TextEditingController get nameController =>
-      _getFormTextEditingController(NameValueKey);
-  TextEditingController get emailController =>
-      _getFormTextEditingController(EmailValueKey);
+mixin $ChangePasswordView on StatelessWidget {
   TextEditingController get passwordController =>
       _getFormTextEditingController(PasswordValueKey);
-  FocusNode get nameFocusNode => _getFormFocusNode(NameValueKey);
-  FocusNode get emailFocusNode => _getFormFocusNode(EmailValueKey);
+  TextEditingController get confirmPasswordController =>
+      _getFormTextEditingController(ConfirmPasswordValueKey);
   FocusNode get passwordFocusNode => _getFormFocusNode(PasswordValueKey);
+  FocusNode get confirmPasswordFocusNode =>
+      _getFormFocusNode(ConfirmPasswordValueKey);
 
   TextEditingController _getFormTextEditingController(String key,
       {String? initialValue}) {
-    if (_RegisterViewTextEditingControllers.containsKey(key)) {
-      return _RegisterViewTextEditingControllers[key]!;
+    if (_ChangePasswordViewTextEditingControllers.containsKey(key)) {
+      return _ChangePasswordViewTextEditingControllers[key]!;
     }
-    _RegisterViewTextEditingControllers[key] =
+    _ChangePasswordViewTextEditingControllers[key] =
         TextEditingController(text: initialValue);
-    return _RegisterViewTextEditingControllers[key]!;
+    return _ChangePasswordViewTextEditingControllers[key]!;
   }
 
   FocusNode _getFormFocusNode(String key) {
-    if (_RegisterViewFocusNodes.containsKey(key)) {
-      return _RegisterViewFocusNodes[key]!;
+    if (_ChangePasswordViewFocusNodes.containsKey(key)) {
+      return _ChangePasswordViewFocusNodes[key]!;
     }
-    _RegisterViewFocusNodes[key] = FocusNode();
-    return _RegisterViewFocusNodes[key]!;
+    _ChangePasswordViewFocusNodes[key] = FocusNode();
+    return _ChangePasswordViewFocusNodes[key]!;
   }
 
   /// Registers a listener on every generated controller that calls [model.setData()]
   /// with the latest textController values
   void listenToFormUpdated(FormViewModel model) {
-    nameController.addListener(() => _updateFormData(model));
-    emailController.addListener(() => _updateFormData(model));
     passwordController.addListener(() => _updateFormData(model));
+    confirmPasswordController.addListener(() => _updateFormData(model));
   }
 
   final bool _autoTextFieldValidation = true;
@@ -72,9 +68,8 @@ mixin $RegisterView on StatelessWidget {
     model.setData(
       model.formValueMap
         ..addAll({
-          NameValueKey: nameController.text,
-          EmailValueKey: emailController.text,
           PasswordValueKey: passwordController.text,
+          ConfirmPasswordValueKey: confirmPasswordController.text,
         }),
     );
     if (_autoTextFieldValidation || forceValidate) {
@@ -85,17 +80,16 @@ mixin $RegisterView on StatelessWidget {
   /// Updates the fieldsValidationMessages on the FormViewModel
   void _updateValidationData(FormViewModel model) =>
       model.setValidationMessages({
-        NameValueKey: _getValidationMessage(NameValueKey),
-        EmailValueKey: _getValidationMessage(EmailValueKey),
         PasswordValueKey: _getValidationMessage(PasswordValueKey),
+        ConfirmPasswordValueKey: _getValidationMessage(ConfirmPasswordValueKey),
       });
 
   /// Returns the validation message for the given key
   String? _getValidationMessage(String key) {
-    final validatorForKey = _RegisterViewTextValidations[key];
+    final validatorForKey = _ChangePasswordViewTextValidations[key];
     if (validatorForKey == null) return null;
     String? validationMessageForKey =
-        validatorForKey(_RegisterViewTextEditingControllers[key]!.text);
+        validatorForKey(_ChangePasswordViewTextEditingControllers[key]!.text);
     return validationMessageForKey;
   }
 
@@ -103,55 +97,48 @@ mixin $RegisterView on StatelessWidget {
   void disposeForm() {
     // The dispose function for a TextEditingController sets all listeners to null
 
-    for (var controller in _RegisterViewTextEditingControllers.values) {
+    for (var controller in _ChangePasswordViewTextEditingControllers.values) {
       controller.dispose();
     }
-    for (var focusNode in _RegisterViewFocusNodes.values) {
+    for (var focusNode in _ChangePasswordViewFocusNodes.values) {
       focusNode.dispose();
     }
 
-    _RegisterViewTextEditingControllers.clear();
-    _RegisterViewFocusNodes.clear();
+    _ChangePasswordViewTextEditingControllers.clear();
+    _ChangePasswordViewFocusNodes.clear();
   }
 }
 
 extension ValueProperties on FormViewModel {
   bool get isFormValid =>
       this.fieldsValidationMessages.values.every((element) => element == null);
-  String? get nameValue => this.formValueMap[NameValueKey] as String?;
-  String? get emailValue => this.formValueMap[EmailValueKey] as String?;
   String? get passwordValue => this.formValueMap[PasswordValueKey] as String?;
+  String? get confirmPasswordValue =>
+      this.formValueMap[ConfirmPasswordValueKey] as String?;
 
-  bool get hasName =>
-      this.formValueMap.containsKey(NameValueKey) &&
-      (nameValue?.isNotEmpty ?? false);
-  bool get hasEmail =>
-      this.formValueMap.containsKey(EmailValueKey) &&
-      (emailValue?.isNotEmpty ?? false);
   bool get hasPassword =>
       this.formValueMap.containsKey(PasswordValueKey) &&
       (passwordValue?.isNotEmpty ?? false);
+  bool get hasConfirmPassword =>
+      this.formValueMap.containsKey(ConfirmPasswordValueKey) &&
+      (confirmPasswordValue?.isNotEmpty ?? false);
 
-  bool get hasNameValidationMessage =>
-      this.fieldsValidationMessages[NameValueKey]?.isNotEmpty ?? false;
-  bool get hasEmailValidationMessage =>
-      this.fieldsValidationMessages[EmailValueKey]?.isNotEmpty ?? false;
   bool get hasPasswordValidationMessage =>
       this.fieldsValidationMessages[PasswordValueKey]?.isNotEmpty ?? false;
+  bool get hasConfirmPasswordValidationMessage =>
+      this.fieldsValidationMessages[ConfirmPasswordValueKey]?.isNotEmpty ??
+      false;
 
-  String? get nameValidationMessage =>
-      this.fieldsValidationMessages[NameValueKey];
-  String? get emailValidationMessage =>
-      this.fieldsValidationMessages[EmailValueKey];
   String? get passwordValidationMessage =>
       this.fieldsValidationMessages[PasswordValueKey];
+  String? get confirmPasswordValidationMessage =>
+      this.fieldsValidationMessages[ConfirmPasswordValueKey];
 }
 
 extension Methods on FormViewModel {
-  setNameValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[NameValueKey] = validationMessage;
-  setEmailValidationMessage(String? validationMessage) =>
-      this.fieldsValidationMessages[EmailValueKey] = validationMessage;
   setPasswordValidationMessage(String? validationMessage) =>
       this.fieldsValidationMessages[PasswordValueKey] = validationMessage;
+  setConfirmPasswordValidationMessage(String? validationMessage) =>
+      this.fieldsValidationMessages[ConfirmPasswordValueKey] =
+          validationMessage;
 }

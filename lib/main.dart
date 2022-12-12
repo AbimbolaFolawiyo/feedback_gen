@@ -7,9 +7,11 @@ import 'package:stacked_services/stacked_services.dart';
 import 'app/app_config.router.dart';
 import 'constants/constants.dart' show Strings;
 
-void main() {
-  setupLocator();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupLocator();
   SnackbarHelper.setupSnackbarUi();
+
   runApp(const MyApp());
 }
 

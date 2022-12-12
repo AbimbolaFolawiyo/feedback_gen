@@ -44,6 +44,7 @@ dependencies:
   logger: ^1.1.0
   freezed: ^2.3.2
   flutter_svg: ^1.1.6
+  shared_preferences: ^0.5.5
 
 dev_dependencies:
   flutter_test:

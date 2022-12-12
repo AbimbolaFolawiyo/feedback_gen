@@ -12,8 +12,10 @@ import 'package:stacked_services/src/snackbar/snackbar_service.dart';
 
 import '../api/api_client.dart';
 import '../api/dio_client.dart';
+import '../pages/profile/profile_vm.dart';
 import '../repositories/auth_repository.dart';
 import '../services/auth_service.dart';
+import '../services/storage_service.dart';
 
 final locator = StackedLocator.instance;
 
@@ -29,4 +31,7 @@ Future<void> setupLocator(
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => NavigationService());
+  locator.registerLazySingleton(() => ProfileViewModel());
+  final storageService = await StorageService.getInstance();
+  locator.registerSingleton(storageService);
 }

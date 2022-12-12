@@ -5,21 +5,26 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CustomTextField extends StatelessWidget {
   final String hint;
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final TextInputType? keyboard;
   final TextInputAction? action;
   final bool? obscureText;
   final Widget? suffixIcon;
   final FocusNode? focusNode;
+  final bool enabled;
+  final String? Function(String?)? validator;
+
   const CustomTextField({
     Key? key,
     required this.hint,
-    required this.controller,
+    this.controller,
     this.keyboard,
     this.action,
     this.obscureText,
     this.suffixIcon,
     this.focusNode,
+    this.enabled = true,
+    this.validator,
   }) : super(key: key);
 
   @override
@@ -42,6 +47,8 @@ class CustomTextField extends StatelessWidget {
           borderSide: const BorderSide(color: Colors.red),
         ),
       ),
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      enabled: enabled,
       controller: controller,
       focusNode: focusNode,
       autocorrect: false,
@@ -49,6 +56,7 @@ class CustomTextField extends StatelessWidget {
       textInputAction: action ?? TextInputAction.next,
       obscureText: obscureText ?? false,
       cursorColor: AppColors.kPrimary,
+      validator: validator,
     );
   }
 }

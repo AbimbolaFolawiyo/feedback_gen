@@ -1,3 +1,4 @@
+import 'package:feedback_gen/app/app_config.router.dart';
 import 'package:feedback_gen/util/validator.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -17,29 +18,27 @@ class RegisterViewModel extends FormViewModel with ValidatorMixin {
   bool get termsAccepted => _termsAccepted;
 
   void register() async {
-    final data = {
-      FullNameValueKey: fullNameValue,
-      EmailValueKey: emailValue,
-      PhoneValueKey: phoneValue,
-      PasswordValueKey: passwordValue,
-    };
-    if (isFormValid &&
-        data.values
-            .any((element) => element != null ? element.isNotEmpty : false)) {
-      setBusy(true);
-      final response = await _auth.register(data: data);
+    setBusy(true);
+    if (isFormValid) {
+      final response = await _auth.register(data: formValueMap);
       response.map(
         success: (value) {
-          setBusy(false);
+          _snackbar
+              .showCustomSnackBar(
+                message: value.data,
+                variant: SnackbarType.success,
+              )!
+              .then((_) => to(Routes.mainView));
         },
         failure: (value) {
-          setBusy(false);
           _snackbar.showCustomSnackBar(
-            message: ApiExceptions.getErrorMessage(value.error),
+            message:
+                '${ApiExceptions.getErrorMessage(value.error.exception)}\n${value.error.error.message!}',
             variant: SnackbarType.failure,
           );
         },
       );
+      setBusy(false);
     }
   }
 
@@ -54,16 +53,16 @@ class RegisterViewModel extends FormViewModel with ValidatorMixin {
 
   @override
   void setFormStatus() {
-    if (hasFullName) {
-      setFullNameValidationMessage(validateNull(fullNameValue!));
+    if (hasName) {
+      setNameValidationMessage(validateNull(nameValue!));
     }
     if (hasEmail) {
       setEmailValidationMessage(validateEmail(emailValue!));
     }
 
-    if (hasPhone) {
-      setPhoneValidationMessage(validatePhone(phoneValue!));
-    }
+    // if (hasPhone) {
+    //   setPhoneValidationMessage(validatePhone(phoneValue!));
+    // }
 
     if (hasPassword) {
       setPasswordValidationMessage(validatePassword(passwordValue!));

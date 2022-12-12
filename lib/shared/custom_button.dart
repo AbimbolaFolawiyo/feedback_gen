@@ -13,12 +13,14 @@ class CustomButton extends StatelessWidget {
     this.icon,
     this.absorbing = false,
     this.isOutline = false,
+    this.color,
   }) : super(key: key);
   final Function() onTap;
   final String text;
   final String? icon;
   final bool absorbing;
   final bool isOutline;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +37,10 @@ class CustomButton extends StatelessWidget {
             color: isOutline
                 ? Colors.transparent
                 : absorbing
-                    ? AppColors.kBrown.withOpacity(.5)
-                    : AppColors.kBrown,
+                    ? color != null
+                        ? color!.withOpacity(.5)
+                        : AppColors.kBrown.withOpacity(.5)
+                    : color ?? AppColors.kBrown,
             borderRadius: BorderRadius.circular(8.r),
             border: isOutline ? Border.all(color: AppColors.kBorder) : null,
           ),
@@ -54,7 +58,9 @@ class CustomButton extends StatelessWidget {
                 text: text,
                 color: absorbing
                     ? AppColors.kPrimary.withOpacity(.5)
-                    : AppColors.kPrimary,
+                    : color != null
+                        ? Colors.white
+                        : AppColors.kPrimary,
                 size: 14.sp,
               ),
             ],
