@@ -67,34 +67,37 @@ class LoginView extends StatelessWidget with $LoginView {
                             ErrorText(
                               errorText: model.passwordValidationMessage!,
                             ),
-                          // Gap(12.h),
-                          // Row(
-                          //   children: [
-                          //     Checkbox(
-                          //       value: model.rememberMe,
-                          //       splashRadius: 0,
-                          //       activeColor: AppColors.kBrown,
-                          //       checkColor: Colors.white,
-                          //       onChanged: (value) =>
-                          //           model.toggleRememberMe(value!),
-                          //       side: const BorderSide(
-                          //         color: AppColors.kPrimary,
-                          //         width: .5,
-                          //       ),
-                          //     ),
-                          //     CustomText(text: Strings.rememberMe, size: 12.sp),
-                          //     const Spacer(),
-                          //     GestureDetector(
-                          //       onTap: () {},
-                          //       child: CustomText(
-                          //         text: Strings.forgottenPassword,
-                          //         size: 12.sp,
-                          //         color: AppColors.kBrown,
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          Gap(40.h),
+                          Gap(12.h),
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: model.rememberMe,
+                                splashRadius: 0,
+                                activeColor: AppColors.kBrown,
+                                checkColor: Colors.white,
+                                onChanged: (value) =>
+                                    model.toggleRememberMe(value!),
+                                side: const BorderSide(
+                                  color: AppColors.kPrimary,
+                                  width: .5,
+                                ),
+                              ),
+                              CustomText(text: Strings.rememberMe, size: 12.sp),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () => model.to(
+                                  Routes.forgotPasswordView,
+                                  pop: false,
+                                ),
+                                child: CustomText(
+                                  text: Strings.forgottenPassword,
+                                  size: 12.sp,
+                                  color: AppColors.kBrown,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Gap(20.h),
                           ValueListenableBuilder<TextEditingValue>(
                             valueListenable: emailController,
                             builder: (context, emailValue, child) =>
@@ -112,9 +115,8 @@ class LoginView extends StatelessWidget with $LoginView {
                             ),
                           ),
                           Gap(16.h),
-                          CustomButton(
+                          CustomButton.outline(
                             onTap: () {},
-                            isOutline: true,
                             icon: AssetPath.google,
                             absorbing: model.isBusy,
                             text: Strings.signInWithGoogle,

@@ -34,6 +34,13 @@ class AuthRepository {
     _user = User.fromJson(userJson);
   }
 
+  Future<void> logout() async {
+    Future.wait([
+      _storage.clear(AppStorageKeys.token),
+      _storage.clear(AppStorageKeys.user),
+    ]);
+  }
+
   Future<ApiResponse> performAuth({
     required Map<String, dynamic> body,
     required AuthType type,

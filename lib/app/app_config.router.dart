@@ -8,15 +8,17 @@
 import 'package:feedback_gen/pages/change_password/change_password_view.dart'
     as _i8;
 import 'package:feedback_gen/pages/edit_profile/edit_profile_view.dart' as _i7;
+import 'package:feedback_gen/pages/forgot_password/forgot_password_view.dart'
+    as _i9;
 import 'package:feedback_gen/pages/login/login_view.dart' as _i3;
 import 'package:feedback_gen/pages/main/main_view.dart' as _i5;
 import 'package:feedback_gen/pages/profile/profile_view.dart' as _i6;
 import 'package:feedback_gen/pages/register/register_view.dart' as _i4;
 import 'package:feedback_gen/pages/splash/splash_view.dart' as _i2;
-import 'package:flutter/material.dart' as _i9;
+import 'package:flutter/material.dart' as _i10;
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i10;
+import 'package:stacked_services/stacked_services.dart' as _i11;
 
 class Routes {
   static const splashView = '/';
@@ -33,6 +35,8 @@ class Routes {
 
   static const changePasswordView = '/change-password-view';
 
+  static const forgotPasswordView = '/forgot-password-view';
+
   static const all = <String>{
     splashView,
     loginView,
@@ -41,6 +45,7 @@ class Routes {
     profileView,
     editProfileView,
     changePasswordView,
+    forgotPasswordView,
   };
 }
 
@@ -73,6 +78,10 @@ class StackedRouter extends _i1.RouterBase {
     _i1.RouteDef(
       Routes.changePasswordView,
       page: _i8.ChangePasswordView,
+    ),
+    _i1.RouteDef(
+      Routes.forgotPasswordView,
+      page: _i9.ForgotPasswordView,
     ),
   ];
 
@@ -128,6 +137,15 @@ class StackedRouter extends _i1.RouterBase {
         settings: data,
       );
     },
+    _i9.ForgotPasswordView: (data) {
+      final args = data.getArgs<ForgotPasswordViewArguments>(
+        orElse: () => const ForgotPasswordViewArguments(),
+      );
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => _i9.ForgotPasswordView(key: args.key),
+        settings: data,
+      );
+    },
   };
 
   @override
@@ -139,22 +157,28 @@ class StackedRouter extends _i1.RouterBase {
 class LoginViewArguments {
   const LoginViewArguments({this.key});
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 }
 
 class RegisterViewArguments {
   const RegisterViewArguments({this.key});
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 }
 
 class ChangePasswordViewArguments {
   const ChangePasswordViewArguments({this.key});
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 }
 
-extension NavigatorStateExtension on _i10.NavigationService {
+class ForgotPasswordViewArguments {
+  const ForgotPasswordViewArguments({this.key});
+
+  final _i10.Key? key;
+}
+
+extension NavigatorStateExtension on _i11.NavigationService {
   Future<dynamic> navigateToSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -170,7 +194,7 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }
 
   Future<dynamic> navigateToLoginView({
-    _i9.Key? key,
+    _i10.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -186,7 +210,7 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }
 
   Future<dynamic> navigateToRegisterView({
-    _i9.Key? key,
+    _i10.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -244,7 +268,7 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }
 
   Future<dynamic> navigateToChangePasswordView({
-    _i9.Key? key,
+    _i10.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -253,6 +277,22 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }) async {
     return navigateTo<dynamic>(Routes.changePasswordView,
         arguments: ChangePasswordViewArguments(key: key),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToForgotPasswordView({
+    _i10.Key? key,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return navigateTo<dynamic>(Routes.forgotPasswordView,
+        arguments: ForgotPasswordViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

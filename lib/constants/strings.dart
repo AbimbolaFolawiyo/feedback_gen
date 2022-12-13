@@ -31,5 +31,6 @@ class Strings {
   static const logout = 'Log Out';
   static const save = 'Save';
   static const newPassword = 'New Password';
+  static const resetPassword = 'Reset Password';
   static const confirmPassword = 'Confirm Password';
 }

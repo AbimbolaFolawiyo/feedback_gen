@@ -68,7 +68,7 @@ class ProfileView extends StatelessWidget {
                 ),
                 Gap(22.h),
                 ProfileItem(
-                  onTap: () {},
+                  onTap: model.logout,
                   title: Strings.logout,
                   icon: Icons.logout_outlined,
                   useBorder: false,

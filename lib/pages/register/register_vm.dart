@@ -33,7 +33,7 @@ class RegisterViewModel extends FormViewModel with ValidatorMixin {
         failure: (value) {
           _snackbar.showCustomSnackBar(
             message:
-                '${ApiExceptions.getErrorMessage(value.error.exception)}\n${value.error.error.message!}',
+                '${ApiExceptions.getErrorMessage(value.error.exception)}\n${value.error.error.message}',
             variant: SnackbarType.failure,
           );
         },
