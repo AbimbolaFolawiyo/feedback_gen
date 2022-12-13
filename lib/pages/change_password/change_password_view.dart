@@ -99,11 +99,11 @@ class ChangePasswordView extends StatelessWidget with $ChangePasswordView {
                               valueListenable: confirmPasswordController,
                               builder: (context, confirmPassword, child) =>
                                   CustomButton(
+                                isBusy: model.isBusy,
                                 onTap: model.resetPassword,
                                 color: AppColors.kPrimary1,
                                 absorbing: newPassword.text.isEmpty ||
-                                    confirmPassword.text.isEmpty ||
-                                    model.isBusy,
+                                    confirmPassword.text.isEmpty,
                                 text: Strings.save,
                               ),
                             ),

@@ -61,7 +61,18 @@ class LoginView extends StatelessWidget with $LoginView {
                             controller: passwordController,
                             focusNode: passwordFocusNode,
                             action: TextInputAction.done,
+                            obscureText: !model.passwordVisible,
                             hint: '${Strings.enter} ${Strings.password}',
+                            suffixIcon: IconButton(
+                              splashRadius: 10.r,
+                              onPressed: model.switchVisibility,
+                              icon: Icon(
+                                model.passwordVisible
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                color: AppColors.kBorder,
+                              ),
+                            ),
                           ),
                           if (model.hasPasswordValidationMessage)
                             ErrorText(
@@ -106,9 +117,9 @@ class LoginView extends StatelessWidget with $LoginView {
                               builder: (context, passwordValue, child) {
                                 return CustomButton(
                                   onTap: model.login,
+                                  isBusy: model.isBusy,
                                   absorbing: emailValue.text.isEmpty ||
-                                      passwordValue.text.isEmpty ||
-                                      model.isBusy,
+                                      passwordValue.text.isEmpty,
                                   text: Strings.signIn,
                                 );
                               },

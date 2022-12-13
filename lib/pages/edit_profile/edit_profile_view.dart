@@ -78,8 +78,9 @@ class EditProfileView extends StatelessWidget with ValidatorMixin {
                             valueListenable: model.nameController,
                             builder: (context, fullName, child) => CustomButton(
                               onTap: model.updatUserName,
+                              isBusy: model.isBusy,
                               color: AppColors.kPrimary1,
-                              absorbing: fullName.text.isEmpty || model.isBusy,
+                              absorbing: fullName.text.isEmpty,
                               text: Strings.save,
                             ),
                           ),

@@ -88,6 +88,16 @@ class RegisterView extends StatelessWidget with $RegisterView {
                             focusNode: passwordFocusNode,
                             action: TextInputAction.done,
                             hint: '${Strings.enter} ${Strings.password}',
+                            suffixIcon: IconButton(
+                              onPressed: model.switchVisibility,
+                              splashRadius: 10.r,
+                              icon: Icon(
+                                model.passwordVisible
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                color: AppColors.kBorder,
+                              ),
+                            ),
                           ),
                           if (model.hasPasswordValidationMessage)
                             ErrorText(
@@ -112,11 +122,11 @@ class RegisterView extends StatelessWidget with $RegisterView {
                                 valueListenable: passwordController,
                                 builder: (context, password, child) =>
                                     CustomButton(
+                                  isBusy: model.isBusy,
                                   onTap: model.register,
                                   absorbing: fullName.text.isEmpty ||
                                       email.text.isEmpty ||
-                                      password.text.isEmpty ||
-                                      model.isBusy,
+                                      password.text.isEmpty,
                                   text: Strings.signUp,
                                 ),
                               ),

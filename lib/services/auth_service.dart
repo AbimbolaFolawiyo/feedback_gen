@@ -27,18 +27,16 @@ class AuthService with ReactiveServiceMixin {
 
   Future<ApiResult> login({
     required Map<String, dynamic> data,
-    bool rememberMe = false,
   }) async {
     try {
       logger.i('Attempting login..');
       final response =
           await _authRepo.performAuth(body: data, type: AuthType.login);
-      if (rememberMe) {
-        _authRepo.saveAuthToken(response.data!['auth']);
-        _saveUser(response.data!['data']);
-      }
+      _authRepo.saveAuthToken(response.data!['auth']);
+      _saveUser(response.data!['data']);
       return ApiResult.success(data: response.data!['message']);
     } on DioError catch (e) {
+      logger.e(e.message);
       return ApiResult.failure(
         error: FailedResponse(
           exception: ApiExceptions.getDioException(e.error),
@@ -59,6 +57,7 @@ class AuthService with ReactiveServiceMixin {
       _saveUser(response.data!['data']);
       return ApiResult.success(data: response.data!['message']);
     } on DioError catch (e) {
+      logger.e(e.message);
       return ApiResult.failure(
         error: FailedResponse(
           exception: ApiExceptions.getDioException(e.error),
@@ -78,13 +77,14 @@ class AuthService with ReactiveServiceMixin {
       _saveUser(user.toJson(), isReactive: true);
       return ApiResult.success(data: response.data!['message']);
     } on DioError catch (e) {
+      logger.e(e.message);
       return ApiResult.failure(
         error: FailedResponse(
           exception: ApiExceptions.getDioException(e.error),
           error: ApiError.fromJson(e.response?.data),
         ),
       );
-    } catch (_) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -99,6 +99,7 @@ class AuthService with ReactiveServiceMixin {
           await _authRepo.resetPassword(body: data, resetType: resetType);
       return ApiResult.success(data: response.data!['message']);
     } on DioError catch (e) {
+      logger.e(e.message);
       return ApiResult.failure(
         error: FailedResponse(
           exception: ApiExceptions.getDioException(e.error),

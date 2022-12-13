@@ -18,6 +18,14 @@ class LoginViewModel extends FormViewModel with ValidatorMixin {
   bool _rememberMe = false;
   bool get rememberMe => _rememberMe;
 
+  bool _passwordVisible = false;
+  bool get passwordVisible => _passwordVisible;
+
+  switchVisibility() {
+    _passwordVisible = !_passwordVisible;
+    notifyListeners();
+  }
+
   void login() async {
     setBusy(true);
     if (isFormValid) {

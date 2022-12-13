@@ -17,6 +17,14 @@ class RegisterViewModel extends FormViewModel with ValidatorMixin {
   bool _termsAccepted = false;
   bool get termsAccepted => _termsAccepted;
 
+  bool _passwordVisible = false;
+  bool get passwordVisible => _passwordVisible;
+
+  switchVisibility() {
+    _passwordVisible = !_passwordVisible;
+    notifyListeners();
+  }
+
   void register() async {
     setBusy(true);
     if (isFormValid) {
