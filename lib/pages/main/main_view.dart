@@ -6,6 +6,7 @@ import 'package:stacked/stacked.dart';
 
 import '../../constants/constants.dart' show AppColors, Strings;
 import 'main_vm.dart';
+import '../home/home_view.dart';
 
 class MainView extends StatelessWidget {
   const MainView({Key? key}) : super(key: key);
@@ -62,7 +63,7 @@ class MainView extends StatelessWidget {
   Widget getView(int index) {
     switch (index) {
       case 0:
-        return const SizedBox();
+        return const HomeView();
       case 1:
         return const SizedBox();
       case 2:
