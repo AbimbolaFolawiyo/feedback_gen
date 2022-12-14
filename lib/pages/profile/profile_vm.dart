@@ -3,6 +3,7 @@ import 'package:feedback_gen/services/auth_service.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
+import '../../app/app_config.router.dart';
 import '../../models/user.dart';
 
 class ProfileViewModel extends BaseViewModel {
@@ -14,6 +15,12 @@ class ProfileViewModel extends BaseViewModel {
 
   void init() {
     _user = _auth.user!;
+  }
+
+  void logout() async {
+    await _auth
+        .logout()
+        .then((_) => _navigator.pushNamedAndRemoveUntil(Routes.loginView));
   }
 
   void to(String route) {

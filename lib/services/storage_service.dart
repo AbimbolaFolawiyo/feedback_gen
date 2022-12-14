@@ -64,4 +64,8 @@ class StorageService {
     String? value = _preferences?.getString(key);
     return jsonDecode(value.toString());
   }
+
+  Future clear(String key) async {
+    return await _preferences?.remove(key);
+  }
 }

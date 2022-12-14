@@ -12,7 +12,7 @@ class SplashViewModel extends BaseViewModel {
 
   void init() {
     Future.delayed(
-      const Duration(seconds: 1),
+      const Duration(seconds: 2),
       () {
         if (_auth.userAuthenticated) {
           _auth.loadUserDetails();

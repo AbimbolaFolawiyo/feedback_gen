@@ -1,6 +1,7 @@
 import 'package:feedback_gen/api/api_client.dart';
 import 'package:feedback_gen/api/dio_client.dart';
 import 'package:feedback_gen/pages/change_password/change_password_view.dart';
+import 'package:feedback_gen/pages/forgot_password/forgot_password_view.dart';
 import 'package:feedback_gen/pages/login/login_view.dart';
 import 'package:feedback_gen/pages/main/main_view.dart';
 import 'package:feedback_gen/pages/edit_profile/edit_profile_view.dart';
@@ -22,6 +23,7 @@ import '../services/services.dart';
     MaterialRoute(page: ProfileView),
     MaterialRoute(page: EditProfileView),
     MaterialRoute(page: ChangePasswordView),
+    MaterialRoute(page: ForgotPasswordView)
   ],
   dependencies: [
     LazySingleton(classType: DioClient, asType: ApiClient),

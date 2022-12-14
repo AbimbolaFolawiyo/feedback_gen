@@ -10,8 +10,13 @@ class FailedResponse {
 class ApiError {
   bool? success;
   String? message;
-  ApiError.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    message = json['message'];
+  ApiError.fromJson(Map<String, dynamic>? json) {
+    if (json != null) {
+      success = json['success'];
+      message = json['message'];
+    } else {
+      success = false;
+      message = '';
+    }
   }
 }

@@ -21,16 +21,22 @@ class AuthService with ReactiveServiceMixin {
     _authRepo.getSavedUser();
   }
 
-  Future<ApiResult> login({required Map<String, dynamic> data}) async {
+  Future logout() async {
+    await _authRepo.logout();
+  }
+
+  Future<ApiResult> login({
+    required Map<String, dynamic> data,
+  }) async {
     try {
-      logger.i('Method login');
+      logger.i('Attempting login..');
       final response =
           await _authRepo.performAuth(body: data, type: AuthType.login);
-
       _authRepo.saveAuthToken(response.data!['auth']);
       _saveUser(response.data!['data']);
       return ApiResult.success(data: response.data!['message']);
     } on DioError catch (e) {
+      logger.e(e.message);
       return ApiResult.failure(
         error: FailedResponse(
           exception: ApiExceptions.getDioException(e.error),
@@ -44,13 +50,14 @@ class AuthService with ReactiveServiceMixin {
 
   Future<ApiResult> register({required Map<String, dynamic> data}) async {
     try {
-      logger.i('Method register');
+      logger.i('Attempting registeration..');
       final response =
           await _authRepo.performAuth(body: data, type: AuthType.register);
       _authRepo.saveAuthToken(response.data!['auth']);
       _saveUser(response.data!['data']);
       return ApiResult.success(data: response.data!['message']);
     } on DioError catch (e) {
+      logger.e(e.message);
       return ApiResult.failure(
         error: FailedResponse(
           exception: ApiExceptions.getDioException(e.error),
@@ -63,20 +70,21 @@ class AuthService with ReactiveServiceMixin {
   }
 
   Future<ApiResult> updateUserName({required User user}) async {
-    logger.i('Method updateUserName');
+    logger.i('Updating username...');
     try {
       final response =
           await _authRepo.updateUserName(body: user.toJsonWithoutId());
       _saveUser(user.toJson(), isReactive: true);
       return ApiResult.success(data: response.data!['message']);
     } on DioError catch (e) {
+      logger.e(e.message);
       return ApiResult.failure(
         error: FailedResponse(
           exception: ApiExceptions.getDioException(e.error),
           error: ApiError.fromJson(e.response?.data),
         ),
       );
-    } catch (_) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -86,11 +94,12 @@ class AuthService with ReactiveServiceMixin {
     required PasswordResetType resetType,
   }) async {
     try {
-      logger.i('Method changePassword');
+      logger.i('Resetting password..');
       final response =
           await _authRepo.resetPassword(body: data, resetType: resetType);
       return ApiResult.success(data: response.data!['message']);
     } on DioError catch (e) {
+      logger.e(e.message);
       return ApiResult.failure(
         error: FailedResponse(
           exception: ApiExceptions.getDioException(e.error),

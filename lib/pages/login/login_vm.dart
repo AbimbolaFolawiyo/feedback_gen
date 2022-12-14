@@ -18,6 +18,14 @@ class LoginViewModel extends FormViewModel with ValidatorMixin {
   bool _rememberMe = false;
   bool get rememberMe => _rememberMe;
 
+  bool _passwordVisible = false;
+  bool get passwordVisible => _passwordVisible;
+
+  switchVisibility() {
+    _passwordVisible = !_passwordVisible;
+    notifyListeners();
+  }
+
   void login() async {
     setBusy(true);
     if (isFormValid) {
@@ -34,7 +42,7 @@ class LoginViewModel extends FormViewModel with ValidatorMixin {
         failure: (value) {
           _snackbar.showCustomSnackBar(
             message:
-                '${ApiExceptions.getErrorMessage(value.error.exception)}\n${value.error.error.message!}',
+                '${ApiExceptions.getErrorMessage(value.error.exception)}\n${value.error.error.message}',
             variant: SnackbarType.failure,
           );
         },
@@ -43,8 +51,12 @@ class LoginViewModel extends FormViewModel with ValidatorMixin {
     }
   }
 
-  void to(String route) {
-    _navigator.pushNamedAndRemoveUntil(route);
+  void to(String route, {bool pop = true}) {
+    if (pop) {
+      _navigator.pushNamedAndRemoveUntil(route);
+    } else {
+      _navigator.navigateTo(route);
+    }
   }
 
   void toggleRememberMe(bool value) {
